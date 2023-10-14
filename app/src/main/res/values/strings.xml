@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">MySimpleMapNavigation</string>
+    <string name="title_activity_maps">MapsActivity</string>
+    <string name="mapbox_access_token">pk.eyJ1IjoidGlvZmFuaTk5IiwiYSI6ImNraTM4dDMxczA4cHQzNG4wNTV1ZzdkMzUifQ.55HYR66S5LHc8mOnY4Nkxg</string>
+</resources>
