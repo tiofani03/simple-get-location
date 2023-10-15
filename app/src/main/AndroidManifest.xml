@@ -16,14 +16,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.MySimpleMapNavigation"
         tools:targetApi="31">
-        <activity
-            android:name=".MapsBoxActivity"
-            android:exported="false" />
-
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="${GOOGLE_MAPS_API_KEY}" />
-
         <activity
             android:name=".MapsActivity"
             android:exported="false"
@@ -35,7 +30,6 @@
                 <action android:name="android.intent.action.MAIN" />
                 <action android:name="android.intent.action.VIEW" />
 
-                <data android:scheme="geo" />
 
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.LAUNCHER" />

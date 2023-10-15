@@ -2,7 +2,6 @@ package com.tiooooo.mysimplemapnavigation
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.location.Geocoder
 import android.os.Bundle
 import android.util.Log
@@ -12,11 +11,12 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
+import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.MarkerOptions
 import com.tiooooo.mysimplemapnavigation.databinding.ActivityMapsBinding
 import java.util.Locale
 
@@ -27,7 +27,7 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
     private lateinit var binding: ActivityMapsBinding
 
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var currentLatLong: LatLng
+    private var currentLatLong: LatLng? = LatLng(0.0, 0.0)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,7 +36,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         setContentView(binding.root)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
-
 
         val mapFragment = supportFragmentManager
             .findFragmentById(R.id.map) as SupportMapFragment
@@ -73,6 +72,11 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
         try {
             val geocoder = Geocoder(this, Locale.getDefault())
             val addresses = geocoder.getFromLocation(latitude, longitude, 1)
+
+            val position = LatLng(latitude, longitude)
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(position, 15f))
+            mMap.addMarker(MarkerOptions().position(position).title("Lokasi Saya"))
+
         } catch (err: Exception) {
             Log.d("Lokasi", "Latlong $latitude, $longitude")
         }
@@ -80,23 +84,6 @@ class MapsActivity : AppCompatActivity(), OnMapReadyCallback {
 
     override fun onMapReady(googleMap: GoogleMap) {
         mMap = googleMap
-
-        // Add a marker in Sydney and move the camera
-//        val sydney = LatLng(-34.0, 151.0)
-//        mMap.addMarker(MarkerOptions().position(sydney).title("Marker in Sydney"))
-//        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney))
-
-        val origin = LatLng(37.7749, -122.4194) // Koordinat San Francisco, misalnya
-        val destination = LatLng(37.3352, -121.8811) // Koordinat San Jose, misalnya
-
-        val polylineOptions = PolylineOptions().apply {
-            add(origin) // Titik awal
-            add(destination) // Titik akhir
-            color(Color.BLUE) // Warna garis lintasan
-            width(10f) // Lebar garis lintasan
-        }
-
-        // Tambahkan garis lintasan ke peta
-        mMap.addPolyline(polylineOptions)
+        getMyLocation()
     }
 }
